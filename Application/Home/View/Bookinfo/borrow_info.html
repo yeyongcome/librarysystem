@@ -1,0 +1,109 @@
+<extend name="Public/index"/>
+<block name="content">
+       <div id = "data-top">
+       		<div class="title-top">
+       			<b>借阅排行</b>
+       		</div>
+       </div>
+
+       <div id = "data-botton">
+	       	<table class = "data-table">
+	       	     <tr>
+	       	     	<th class = "first-tr">书名</th>
+	       	     	<th>图书id</th>
+	       	     	<th>是否借出</th>
+	       	     	<th>借阅次数</th>
+	       	     	
+	       	     </tr>
+	       	     <notempty name = "result">
+		       	     <volist name = "result" id = "vo">
+		       	     	<tr>
+			       	     	<td class="first-tr">{$vo.name}</td>
+			       	     	<td>{$vo.id}</td>
+			       	     	<td>
+			       	     		<if condition = "$vo.is_checkout eq 1">
+			       	     			是<else/>否
+			       	     		</if>
+			       	     	</td>
+			       	     	<td>{$vo.borrow_num}</td>
+			       	     </tr>
+		       	     </volist>
+		       	</table>
+		       	<else/>			
+	       		</table>
+	       		<div class="no-notice"><h3>ai..暂时无数据!</h3></div>
+	       	</notempty>
+	       	 <div class="witing-div">
+			{$_page}
+			</div>
+			<div class="witing-div">
+				<img class='witing' src='__IMG__/loading_icon.gif'>
+			</div>
+       </div>
+</block>
+<block name="script">
+	<script>
+		function forbid_user(id,status){
+			$.ajax({
+                url:$("#model_url").val()+'/forbid_user',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    id:id,
+                    status:status
+                },
+                success:function(data){
+                	if(data > 0){	
+                		search_data(); //异步刷新
+                		web_notice('操作成功',0);
+                	}else{
+                		web_notice('操作失败',1);
+                	} 
+                }
+            });
+		}
+		function user_search(){
+			$("#PageNum").val(1);
+			search_data();
+		}
+
+		//异步分页
+        function search_data(){
+            var p         = $("#PageNum").val();
+            var real_name = $.trim($("#search_real_name").val());
+            var phone     = $.trim($("#search_phone").val());
+            var email     = $.trim($("#search_email").val());
+            var start_time= $.trim($("#start_time").val());
+            var end_time  = $.trim($("#end_time").val());
+            var gender    = $.trim($("#search_user_sex").val());
+            var status    = $.trim($("#search_user_status").val());
+            var user_type = $.trim($("#search_user_type").val());
+            var is_active = $.trim($("#search_user_isactive").val());
+
+            $('.witing').css('display','block');
+            $.ajax({
+                url:$("#model_url").val()+'/user_data_search',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    p:p,
+                    real_name :real_name,
+                    phone     :phone,
+                    email     :email,
+                    start_time:start_time,
+                    end_time  :end_time,
+                    gender    :gender,
+                    status    :status,
+                    user_type :user_type,
+                    is_active :is_active
+                },
+                success:function(data){
+                    $(".witing").css("display","none");
+                    $("#data-botton").html(data);
+                }
+            });
+         }
+	</script>
+</block>
+
+

@@ -1,0 +1,22 @@
+.form-div{
+	margin-left:-30px;
+}
+.form-div span{
+	font-size: 14px;
+}
+.form-div input{
+	height:25px;
+}
+#news_content{
+	margin-left:35px;
+}
+.create_save{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+.bcanael{
+    margin-left:-5px;
+}
+#data-top{
+    padding-bottom: 10px;
+}
