@@ -1,0 +1,60 @@
+<extend name="Public/index"/>
+
+<block name="style">
+	<link rel = "stylesheet" type="text/css" href="__CSS__/setinfo.css">
+</block>
+<block name="content">
+	<div id = "data-top">
+   		<div class="title-top">
+   			<b>添加图书</b>
+   		</div>
+   </div>
+    <div id="please-pop" style = "margin-top:40px;">
+    	<div class="form-div">
+	    	<span class="title-tips">类 &nbsp; &nbsp; 别：</span>
+	   		<select id = "search_book_type" class="text-input">  
+	   			<option value="0">请选择类别</option>
+          <volist name="lists" id="vo">
+              <option value='{$vo.id}'>{$vo.name}</option>
+          </volist>
+	   		</select>
+	   	</div>
+    	<div class="form-div">
+    		<span class="title-tips">书&nbsp;名： &nbsp;</span><input class="text-input" name = "book_name" placeholder="请填写图书名" type="text">
+    	</div>
+    	<div class="create_save">
+    		<div class = "but bcanael">取消</div>
+    		<div class = "but bsave">确认</div>
+    	</div>
+    </div> 
+</block>
+<block name="script">
+<script>
+    $(".bsave").click(function(){
+        var type_id = $.trim($("#search_book_type").val());
+        if(type_id == ''){
+            web_notice('请选择类别',1);
+            return false;
+        }
+        $.ajax({
+            url:$("#model_url").val()+'/add_books',
+            type:"POST",
+            dataType:"TEXT",
+            data:{
+                book_name:$.trim($("input[name='book_name']").val()),
+                type_id  :type_id
+            },
+            success:function(data){
+                if(data > 0){   
+                    web_notice('添加成功',0);
+                    $("input[name='book_name']").val('');
+                }else{
+                    web_notice('添加失败',1);
+                } 
+            }
+        });
+    });
+</script>
+</block>
+
+

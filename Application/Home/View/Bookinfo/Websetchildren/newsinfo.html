@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>在线答疑-新闻详情</title>
+    <link href="__ROOT__/Public/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <link rel="stylesheet" type="text/css" href="__CSS__/blue_color.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__CSS__/news/newsinfo.css" media="all">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <!--<![endif]-->
+</head>
+<body class="index-body">
+<div id="indexMain" class="index-main" style = " padding-top: 0px;">
+        <div id="jqContent" class="" style="text-align: left;">
+        <div id="headerCss" style="overflow: hidden;">
+            <div id="diaryone"> </div>
+            <div id="ctl00_header">
+                <div id="headerLeft"> </div>
+                <div id="headerCenter"></div>
+                <div id="headerRight"></div>
+            </div>
+        </div>
+        <div id="mainCss">
+            <div id="mainInner">
+                <div id="box">
+                    <div class="survey" style="margin:0px auto;">
+                        <div class="surveyhead" style="border: 0px;">
+                            <br><br>
+                            <div style="font-size:25px;text-align: center;">{$total_list['title']}
+                            </div>
+                            <br>
+                        </div>
+                        <div style="clear: both;"> </div>
+                    </div>
+                </div>
+                <div id="times">
+                    【发布时间：{$total_list['create_time']} &nbsp; 阅读次数：{$total_list['read_count']}】
+                </div>
+                <div id="content">
+                    {$total_list['content']}
+                </div>
+            </div>
+        </div>
+        <div id="footercss"></div>
+        <div style="clear:both;"></div>
+</div>
+<script type="text/javascript">
+    +function(){
+        var $window = $(window);
+        $window.resize(function(){
+            $("#indexMain").css("min-height", $window.height() - 120);
+            $("#mainCss").css("min-height", $window.height() - 180);
+            $("#mainInner").css("min-height", $window.height() - 60);
+        }).resize();
+    }();
+</script>
+</body>
+</html>
