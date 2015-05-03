@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>图书管理系统</title>
+    <script src="__STATIC__/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="__CSS__/common.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__CSS__/index.css" media="all">
+    <block name="style"></block>
+</head>
+<body>
+	<div id="left" class="content-div">
+        <!--展开按钮-->
+        <div id="open-mnue">
+            <div id="ret-line" title='展开'></div>
+        </div> 
+        <!--左边导航-->
+        <volist name="top_menu" id="vo">
+            <div class="left-line" title='{$vo.description}'>
+                <img class="line-img" myid="{$vo.id}" oldurl="{$vo.oldurl}" urlimg="{$vo.url}" name="<h3>{$vo.name}</h3>" src="__IMG__/icon{$vo.sort_factor}.png">
+            </div>
+        </volist>
+	</div>
+    <!--收起按钮-->
+	<div id="content" class="content-div">  
+        <div id="del-line" title='收起' class="notice-line">&lt;&lt;</div>  
+	</div>
+    <div id="right-line-top">
+        <!--顶部导航选项卡-->
+        <div id="right-line">
+            <volist name="all_menu" id="list">
+                <div class = "top-line" value="{$list[0]}">
+                    <div class="top-line-delete">×</div>
+                    <div style="clear:both;"></div>
+                    <div class="top-line-text">{$list[1]}</div>
+                </div>
+            </volist>
+        </div>
+
+        <!--右上角头像显示-->
+        <div id="right-right">
+            <table>
+                <tr>
+                <td>
+                    <a href="{:U('Index/setinfo')}">
+                    <img id="top-user_photo" src="__IMG__/moren.jpg"></a>
+                </td>
+                <td id="loginout">
+                    <b>
+                    <if condition= "$Think.session.type eq 1">
+                        <a href="{:U('Index/index')}">登陆</a>
+                    <else/>
+                        <a href="{:U('Public/logout')}">注销</a>
+                    </if>
+                    </b>
+                </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <!--主内容-->
+	<div id="right">
+        <div id="web-notice">
+            <div class="notice-delete">
+                 × 
+            </div>
+            <div class="notice-content">
+                删除成功
+            </div>
+        </div>
+
+        <div id="right-content">
+             <block name="content"><h1>这是内容</h1></block>
+        </div> 
+	</div>
+    <div style="clear:both;"></div>
+
+     <!--页尾-->
+    <div id="foots">
+        <div id="foots-div">
+             &nbsp;&nbsp;版权所有：http://librarysystem.com
+        </div>
+        <div class="foots-div-time">
+           技术支持：librarysystem 开发团队
+        </div>
+    </div>
+
+    <!--左边所有二级导航，便于滑动显示-->
+    <div style="display:none">
+        <volist name="child_menu" id="vos1">
+            <div id="ids{$vos1.id}">
+                <h3>&nbsp;{$vos1.name}</h3>
+                <volist name="vos1.children" id="vos2">
+                    <div name="{$vos2.url}" onmouseover="setcolor($(this))" onmouseout="delcolor($(this))" class="divline">
+                        <a class="moreurl" href="__ROOT__/index.php/{$vos2.url}">{$vos2.name}</a>
+                    </div>
+                </volist>
+            </div>
+        </volist>
+    </div>
+    <!-- 滑动块 -->
+    <div id = "tpiss">
+        <div class='tips-line-content'>
+        </div>
+    </div>
+    <!--网站根目录-->
+    <input type="hidden" id="root_url" value="__ROOT__"/>
+    <!--模块目录-->
+    <input type="hidden" id="model_url" value="__URL__"/>
+    <!--公共图片目录-->
+    <input type="hidden" id="img_url" value="__IMG__"/>
+    <!--记录选中导航图片，便于刷新后显示-->
+    <input type="hidden" id="img_index" value=""/> 
+    <!--顶部导航选中的导航url-->
+    <input type="hidden" id="selected_menu" value="{$selected_menu}"/> 
+    <!--左边导航选中的导航url-->
+    <input type="hidden" id="controller" value="{$controller}"/> 
+    <!--跳转的页数-->
+    <input type="hidden" id="PageNum" value="1">
+    <!--是否收起导航栏-->
+    <input type="hidden" id="is_del_line" value="{$Think.session.is_del_line}">
+    <!--左边二级导航选中的导航url-->
+    <input type="hidden" id="children_color" value="{$children_color}"/> 
+    <script type="text/javascript" src="__JS__/common.js"></script>
+    <script type="text/javascript" src="__JS__/index.js"></script>
+    <script type="text/javascript">  
+        //兼容各个浏览器屏幕大小
+        var $window = $(window);
+        $window.resize(function(){
+            $("#right").css("height",$window.height()-80);
+            $("#right").css("width",$(window).width()-75);
+            $("#foots").css("top",$window.height() - 26);
+            set_tpline_visible();//检查导航的长度
+        }).resize();
+
+        //得到选中的导航，改变选中二级导航颜色
+        var num = 0;
+        $(".line-img").each(function(){
+            if($(this).attr("oldurl") == $("#controller").val()){
+                return false;
+            }
+            num++;
+        });
+
+        //当滑动块收起后有效
+        del_line_block(); 
+        $("#foots").css("top",$window.height() - 26);
+
+        //改变左父级侧导航的颜色;(高亮)
+        change_leftline_color(num); 
+
+        /**
+         * 当鼠标移上滑动块时跟随鼠标变化
+         * 在两种模式中都有
+         */
+        $(".left-line").mouseover(function(){
+            //显示滑动导航栏
+            showtips($(this).index(".left-line"));
+            if($("#is_del_line").val() == 1){
+                $(this).css("background-color","#2E5C2E");
+            }else{
+                $(this).css("background-color","#484848");
+            }
+            $(this).siblings().css("background-color","#2F2F2F");
+        });
+
+        //点击一级导航时跳转页面
+        $(".line-img").click(function(){
+            $("#tpiss").find(".divline :eq(0)").css("background-color","#F47C20");
+            window.location = $("#root_url").val()+"/index.php/"+$(this).attr("urlimg");
+        });
+
+        /*************************收起,恢复导航块***************************/
+        //收起导航块
+        $("#del-line").click(function(){
+            //改变导航栏颜色
+            $(".left-line :eq("+num+")").css("background-color","#484848");
+            $("#tpiss").css('background-color','#2F2F2F');
+            $("#tpiss").css('opacity','0.88');
+            $("#tpiss").css('filter','alpha(opacity=88)');
+            del_line_block();
+            //异步改变session值 =2
+            change_session(2); 
+            //及时假刷新，改变is_del_line隐藏域的值 =2
+            $("#is_del_line").val(2);
+            //检查选项卡导航,重新设置
+            set_tpline_visible();
+        });
+
+        //恢复导航块
+        $("#ret-line").click(function(){
+            //改变导航栏颜色
+            change_leftline_color(num); 
+            $(".left-line :eq("+num+")").css("background-color","#2E5C2E");
+            $("#tpiss").css('background-color','#000000');
+            $("#tpiss").css('opacity','0.5');
+            $("#tpiss").css('filter','alpha(opacity=50)');
+            $(this).css("display","none");
+            $("#right").css("margin-left",'220px');
+            $("#foots-div").css("margin-left","210px");
+            $("#del-line").parent().css("display","block");
+            $("#right").css("width",$(window).width()-230);
+             //异步改变session值 =1
+            change_session(1); 
+            //及时假刷新，改变is_del_line隐藏域的值 =1
+            $("#is_del_line").val(1);
+            //检查选项卡导航,重新设置
+            set_tpline_visible();
+            //显示左侧二级滑动导航栏，num是超全局变量
+            showtips(num);
+        });
+        /********************************************************************/ 
+    </script>
+    <block name="script"></block>
+</body>
+</html>

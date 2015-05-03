@@ -1,0 +1,98 @@
+<extend name="Public/index"/>
+<block name="content">
+       <div id = "data-top">
+       		<div class="title-top">
+       			<b>用户角色管理</b>
+       		</div>
+       		<div style="padding:10px;">
+       			<span class = "databutton dataimport" onclick="add_user()">新增</span>
+       		</div>
+       </div>
+       <div id = "data-botton">
+	       	<table class = "data-table">
+	       	     <tr>
+	       	     	<th class = "first-tr">ID</th>
+	       	     	<th>角色名称</th>
+	       	     	<th>角色描述</th>
+	       	     	<th>授权管理</th>
+	       	     	<th>所在用户组</th>
+	       	     	<th>状态</th>
+	       	     	<th>操作</th>
+	       	     </tr>
+	       	     <notempty name = "role_list">
+		       	     <volist name = "role_list" id = "vo">
+		       	     	<tr>
+			       	     	<td class="first-tr">{$vo.id}</td>
+			       	     	<td>{$vo.name}</td>
+			       	     	<td>{$vo.description}</td>
+			       	     	<td>
+		       	     			<a href="{:U('Setting/authority')}?role_id={$vo.id}"> 访问授权 </a>
+		       	     			<if condition="$vo.id eq $default_type">
+		       	     				<b style="color:#aaaaaa">关联用户</b>
+		       	     				<else/>
+		       	     					<a href="__URL__/link_user?role_id={$vo.id}">关联用户</a>
+		       	     			</if>
+			       	     	</td>
+			       	     	<td>
+			       	     		{$vo.parent_name}
+			       	     	</td>
+			       	     	<td>
+			       	     		<if condition="$vo.is_forbid eq 0">
+			       	     			正常
+			       	     		<else/>
+			       	     			已禁用
+			       	     		</if>
+			       	     	</td>
+			       	     	<td>
+			       	     		<if condition="$vo.id eq 4">
+				       	     	  <b style="color:#aaaaaa">删除</b>
+				       	     	  <else/>
+				       	     	  <a href="javascript:" onclick="user_delete()">删除</a> 
+				       	       </if>
+			       	     	   <a href="javascript:void(0);" onclick="look_user({$vo.id})" value="{$vo.id}">编辑</a> 
+			       	     	   <if condition="$vo.is_forbid eq 0">
+				       	     	   <a href = "javascript:" onclick="forbid_user({$vo.id},2)">禁用</a>
+				       	       <else/>
+				       	     	   <a href="javascript:" onclick="forbid_user({$vo.id},0)">启用</a>
+				       	       </if>
+			       	     	</td>
+			       	     </tr>
+		       	     </volist>
+		       	</table>
+		       	<else/>			
+	       		</table>
+	       		<div class="no-notice"><h3>ai... 暂时无数据!</h3></div>
+	       	</notempty>
+	       	<div class="witing-div">
+			{$_page}
+			</div>
+			<div class="witing-div">
+				<img class='witing' src='__IMG__/loading_icon.gif'>
+			</div>
+       </div>
+</block>
+<block name="script">
+	<script>
+		function forbid_user(id,status){
+			$.ajax({
+                url:$("#model_url").val()+'/forbid_user',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    id:id,
+                    status:status
+                },
+                success:function(data){
+                	if(data > 0){	
+                		search_data(); //异步刷新
+                		msg("操作成功",1);
+                	}else{
+                		msg("操作失败",8);
+                	} 
+                }
+            });
+		}
+	</script>
+</block>
+
+

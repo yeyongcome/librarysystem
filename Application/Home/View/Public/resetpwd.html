@@ -1,0 +1,396 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>在线答疑后台管理平台</title>
+    <script src="__STATIC__/My97DatePicker/My97DatePicker/WdatePicker.js"></script>
+     <!--[if lt IE 9]>
+    <script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+    <![endif]--><!--[if gte IE 9]><!-->
+    <link rel="stylesheet" type="text/css" href="__CSS__/common.css" media="all">
+    <script type="text/javascript" src="__JS__/common.js"></script>
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <!--<![endif]-->
+    <block name="style"></block>
+    <style>
+    	body{
+    		margin:0px;
+    		padding:0px;
+    	}
+    	#admindiv{
+    		margin:auto;
+    		width:1366px;
+    	}
+    	#left{
+    		width:65px;
+    		background-color: #2F2F2F;
+    	}
+    	#content{
+    		width:154px;
+    		background-color: #5CB85C;
+    	}
+    	#right{
+    		width:1147px;
+    		background-color: #ffffff;
+    	}
+    	.content-div{
+    		float:left;
+    		height:auto;
+            height:633px;
+    	}
+    	#left div{
+    		margin-left:13px;
+    		margin-top:35px;
+    	}
+        .moreurl{
+            color:#ffffff;
+            font-size:13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .divline{
+            margin-top:15px;
+            margin-left:10px;
+            padding:3px 5px 2px 8px;
+            background-color:#4BBD00;
+        }
+        #tpiss{
+            width:114px;
+            height:270px;
+        }
+        #right-content{
+            width:1130px;
+            min-height: 550px;
+            margin-top: 0px;
+            margin-left: 2px;
+            border-top: 1px solid #EEEEEE;
+            border-right: 1px solid #EEEEEE;
+        }
+        #right-line{
+            width:1000px;
+            height:40px;
+            float:left;
+            margin-top:10px;
+            margin-left:10px;
+            background-color: #ffffff;
+        }
+        .top-line{
+            width:100px;
+            height:35px;
+            position: absolute;
+            text-align: center;
+            float:left;
+            top:15px;
+            border-top: 1px solid #EEEEEE;
+            border-left: 1px solid #EEEEEE;
+            border-right: 1px solid #EEEEEE;
+            border-bottom: 1px solid #ffffff;
+            background-color: #E8F0F4;
+        }
+        .selected{
+            background-color: #ffffff;
+        }
+        .top-line-text{
+            margin-top:4px;
+            font-size:13px;
+        }
+        .top-line-delete{
+            width:100px;
+            height:5px;
+            margin-top:1px;
+            text-align:right;
+            font-size:11px;
+        }
+        #right-right{
+            width:100px;
+            height:40px;
+            margin-top:5px;
+            margin-left:15px;
+            float:left;
+            background-color: #ffffff;
+        }
+        #right-right img{
+            border-radius:20px;
+            width:40px;
+            height:40px;
+        }
+        #right-right a{
+            text-decoration: none;
+            color:#333333;
+            font-weight:600;
+        }
+    </style>
+</head>
+<body>
+	<div id="admindiv">
+		<div id="left" class="content-div">
+            <volist name="top_menu" id="vo">
+                <div>
+                    <img class="line-img" myid="{$vo.id}" oldurl="{$vo.oldurl}" urlimg="{$vo.url}" name="<h3>{$vo.name}</h3>" src="__IMG__/icon{$vo.sort_factor}.png">
+                </div>
+            </volist>
+		</div>
+		<div id="content" class="content-div">
+	         
+		</div>
+		<div id="right" class="content-div">
+            <div id="right-line">
+                <volist name="all_menu" id="list">
+                    <div class = "top-line" value="{$list[0]}">
+                        <div class="top-line-delete">×</div>
+                        <div class="top-line-text">{$list[1]}</div>
+                    </div>
+                </volist>
+            </div>
+            <div id="right-right">
+                <table>
+                    <tr>
+                    <td><img src="__IMG__/userphoto/zhaoyafei.jpg"></td>
+                    <td><b style="color:#aaaaaa;margin-bottom:-10px;font-size:16px;">&nbsp;<a href="{:U('Public/logout')}">退出</a></b></td>
+                    </tr>
+                </table>
+                
+            </div>
+            <div style="clear:both;">
+            </div>
+            <div id="right-content">
+                 <block name="content"><h1>这是内容</h1></block>
+            </div>
+		</div>
+	<div>
+    <div style="display:none">
+        <volist name="child_menu" id="vos1">
+            <div id="ids{$vos1.id}">
+                <h3>&nbsp;{$vos1.name}</h3>
+                <volist name="vos1.children" id="vos2">
+                    <div name="{$vos2.url}" onmouseover="setcolor($(this))" onmouseout="delcolor($(this))" class="divline">
+                        <a class="moreurl" href="__ROOT__/admin.php/{$vos2.url}">{$vos2.name}</a>
+                    </div>
+                </volist>
+            </div>
+        </volist>
+    <div>
+    <input type="hidden" id="root_url" value="__ROOT__"/>
+    <input type="hidden" id="model_url" value="__URL__"/>
+    <input type="hidden" id="img_url" value="__IMG__"/>
+    <input type="hidden" id="img_index" value=""/> 
+    <input type="hidden" id="selected_menu" value="{$selected_menu}"/> 
+    <input type="hidden" id="controller" value="{$controller}"/> 
+    <input type="hidden" id="children_color" value="{$children_color}"/> 
+     <script type="text/javascript" src="__STATIC__/layerv1.8.5/layer/layer.min.js"></script>
+    <script type="text/javascript">
+        $(window).resize(function(){                
+            $(".content-div").css("height",$(document).height());
+            showtips($("#img_index").val());
+        });     
+        set_top();//排列选项卡
+        $(".content-div").css("height",$(document).height());
+        //得到选中的导航
+        var num = 0;
+        $(".line-img").each(function(){
+            if($(this).attr("oldurl") == $("#controller").val()){
+                return false;
+            }
+            num++;
+        });
+        showtips(num);
+
+
+        $(".line-img").mouseover(function(){
+             $(this).css("cursor","pointer");
+             showtips($(this).index(".line-img"));
+        });
+        
+        $(".line-img").click(function(){
+            $("#tpiss").find(".divline :eq(0)").css("background-color","#F47C20");
+            window.location = $("#root_url").val()+"/admin.php/"+$(this).attr("urlimg");
+        });
+
+        //导航颜色变化
+        function setcolor(obj){
+            obj.css("background-color","#4CDB00");
+        }
+        function delcolor(obj){
+            obj.css("background-color","#4BBD00");
+            setlincolor();
+        }
+        //显示大导航
+        function showtips(index){
+            $("#img_index").val(index);
+            if(index > 3){
+                tips("<div id='tpiss'>"+$("#ids"+$('.line-img :eq('+index+')').attr("myid")).html()+"</div>",0,$(".line-img :eq("+index+")"));
+                $(".xubox_layer").css({"margin-left":"52px","margin-top":"50px"});
+                $(".xubox_tips i.layerTipsT").css({"margin-left":"-20px","margin-bottom":"20px"});
+            }else{
+                tips("<div id='tpiss'>"+$("#ids"+$('.line-img :eq('+index+')').attr("myid")).html()+"</div>",1,$(".line-img :eq("+index+")"));
+            }
+            setlincolor();
+        }
+        //添加导航颜色
+        function setlincolor(){
+            $("#tpiss").find(".divline").each(function(){
+                if($(this).attr("name") == $("#children_color").val()){    
+                    $(this).css("background-color","#F47C20");
+                }
+            });
+        }
+        
+        $(".top-line-delete").mouseover(function(){
+            $(this).css("cursor","pointer");
+        });
+        $(".top-line-text").mouseover(function(){
+            $(this).css("cursor","pointer");
+        });
+       
+        $(".top-line-delete").click(function(){
+            var obj = $(this).parent();
+            var select_url = obj.attr('value');
+            if(obj.hasClass('selected')){
+                var before = obj.prevUntil().length;
+                if(before > 0){
+                    delete_selete_url(obj.attr('value'),before-1,1);
+                    return false;
+                }
+                var after = obj.nextUntil().length;
+                if(after > 0){
+                    delete_selete_url(obj.attr('value'),1,1);
+                    return false;
+                }
+                delete_selete_url(obj.attr('value'),-1,1);
+
+            }else{
+                delete_selete_url(obj.attr('value'),0,0);
+                obj.remove();
+                set_top();//重新排列选项卡
+            }
+            
+        });
+
+        $(".top-line-text").click(function(){
+            window.location.href = "__ROOT__/admin.php/"+$(this).parent().attr('value');
+        });
+
+        function delete_selete_url(selete_url,num,status){
+            $.ajax({
+                url:"__ROOT__/admin.php/Public/delete_selete_url",
+                type:'post',
+                dataType:'text',
+                data:({
+                    selete_url:selete_url
+                }),
+                success:function(){ 
+                    if(status == 1){
+                        if(num == -1){
+                            window.location.href= "__ROOT__/admin.php/Index/index";
+                        }else{
+                            $(".top-line-text:eq("+num+")").click();
+                        }
+                        
+                    }
+                }
+            });
+        }
+
+        function set_top(){
+            var lefts = 1;
+            var selected_menu = $.trim($("#selected_menu").val());
+            $(".top-line").each(function(){
+                $(this).css("left",120+lefts*110+"px");
+                lefts++;
+                if($(this).attr('value') == selected_menu){
+                    $(this).addClass('selected');
+                    $(this).siblings().removeClass('selected');
+                }
+            });
+        }
+
+        +function(){
+
+	        // 表单获取焦点变色 
+	        $("form").on("focus", "input", function(){
+		        $(this).addClass('focus');
+	        }).on("blur","input",function(){
+				        $(this).removeClass('focus');
+			        });
+		    $("form").on("focus", "textarea", function(){
+			    $(this).closest('label').addClass('focus');
+		    }).on("blur","textarea",function(){
+			    $(this).closest('label').removeClass('focus');
+		    });
+
+            // 导航栏超出窗口高度后的模拟滚动条
+            var sHeight = $(".sidebar").height();
+            var subHeight  = $(".subnav").height();
+            var diff = subHeight - sHeight; //250
+            var sub = $(".subnav");
+            if(diff > 0){
+                $(window).mousewheel(function(event, delta){
+                    if(delta>0){
+                        if(parseInt(sub.css('marginTop'))>-10){
+                            sub.css('marginTop','0px');
+                        }else{
+                            sub.css('marginTop','+='+10);
+                        }
+                    }else{
+                        if(parseInt(sub.css('marginTop'))<'-'+(diff-10)){
+                            sub.css('marginTop','-'+(diff-10));
+                        }else{
+                            sub.css('marginTop','-='+10);
+                        }
+                    }
+                });
+            }
+        }();
+
+        /**   
+         * 公用方法，
+         * msg:提示的消息。
+         * guide：表示箭头方向（0：上，1：右，2：下，3：左）。
+         * obj：表示靠近的元素对象F26C4F，0FA6D8
+         */
+        function tips(msg,guide,obj){
+            layer.tips(msg, obj, {
+                style: ['background-color:#0FA6D8; color:#fff', '#0FA6D8'],
+                maxWidth:250,
+                more: false,
+                guide: guide,
+                isGuide:true,
+                time: 0,
+                closeBtn:[0, true]
+            });
+        }
+
+        //公用方法，msg:提示的消息。type：提示的图标
+        function msg(msg,type){
+            layer.msg(msg, 2, {type: type, shade: false, rate: 1});
+        }
+
+        /**
+         * 1：绿色对号   2：交叉铅笔      3： 禁用标志   4： 问号  
+         * 5：禁止       6：很棒，大拇指  7： 锁         8： 哭脸
+         * 9：笑脸       10：对号         11：闹钟       12：微信对话        
+         * 13：大便      14：发信息       15：向下箭头   16：等待图标  
+         * 相关参考：http://sentsin.com/jquery/layer  
+         */ 
+         //时间格式化
+        function gettime(search_time){
+            var search_time = $.trim(search_time);
+            if(search_time == '' || search_time == null){
+                return '';
+            }
+            var new_str = search_time.replace(/:/g,'-');
+            new_str = new_str.replace(/ /g,'-');
+            var arr = new_str.split("-");
+            if(new_str.length == 10){
+                arr[3] = '00';
+                arr[4] = '00';
+                arr[5] = '00';
+            }
+            var datum = new Date(Date.UTC(arr[0],arr[1]-1,arr[2],arr[3]-8,arr[4],arr[5]));
+            return datum.getTime();
+        }
+
+    </script>
+    <block name="script"></block>
+</body>
+</html>
