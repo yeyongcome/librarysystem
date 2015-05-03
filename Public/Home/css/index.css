@@ -1,0 +1,260 @@
+body{
+    margin:0px;
+    padding:0px;
+    background-color: white;
+}
+.content-div{
+    height:100%;
+}
+#left{
+    width:65px;
+    z-index:1000;
+    position: fixed;
+    background-color: #2F2F2F;
+}
+
+/*************提示框样式表***********/
+#web-notice{
+    width:350px;
+    height:50px;
+    position:absolute;
+    margin-left:30%;
+    margin-top:10px;
+    display: block;
+    z-index:2000;
+    left:auto;
+    border-radius: 3px;
+    display: none;
+    font:16px "microsoft yahei";
+    background-color: #86DB00;
+}
+#web-notice div{
+    color:#ffffff;
+    font-weight:600;
+}
+/*提示框删除按钮样式*/
+.notice-delete{
+    text-align:right;
+    margin-top: 0px;
+    margin-right: 6px;
+    font-size: 19px;
+    height: 14px;
+    cursor: pointer;
+}
+/*提示框内容样式*/
+.notice-content{
+    text-align:center;
+    margin-left:10px;
+}
+
+/*******网站尾部*********/
+#foots{
+    height:25px;
+    width:100%;
+    margin-left:10px;
+    position: fixed;
+    color: #666666;
+    border-top:1px solid #eeeeee;
+    background-color: #F5F5F5;
+}
+.foots-div-time{
+    float:right;
+    margin-right:20px;
+    margin-top:5px;
+    font-size: 13px;
+}
+/***********************/
+#left .left-line{
+  /*  margin-left:13px;*/
+    margin-top:15px;
+}
+.moreurl{
+    color:#ffffff;
+    font-size:13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+.divline{
+    margin-top:15px;
+    margin-left:10px;
+    padding:2px 3px 2px 10px;
+    text-align: left;
+    width:95px;
+    background-color:#4BBD00;
+}
+.tips-line-content .divline{
+    margin-top:15px;
+    margin-left:10px;
+    padding:4px 3px 2px 10px;
+    text-align: left;
+    width:95px;
+    padding-bottom: 4px;
+    background-color:#4BBD00;
+}
+/***********取消,返回滑动导航************/
+.notice-line{
+    width:18px;
+    height:18px;
+    float:right;
+    color:#ffffff;
+    margin-right:5px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+}
+#del-line{ 
+    margin-top:5px;
+}
+#ret-line{
+    display:none;
+    color:#bbbbbb;
+    margin-right:6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+}
+#open-mnue{
+    height:25px;
+    text-align:right;
+    padding-top:3px;
+}
+
+/***************************/
+.line-img{
+    cursor:pointer;
+}
+#tpiss{
+    width:114px;
+    height:270px;
+}
+#right-content{
+    width:100%;
+    padding-right:10px;
+    background-color: #ffffff;
+}
+
+#right-line-top{
+    height:51px;
+    width:100%;
+    z-index:100;
+    position: fixed;
+    border-bottom: 1px solid #EEEEEE;
+    background-color: #ffffff;
+}
+#right-line{
+    height:40px;
+    float:left;
+    margin-top:10px;
+    margin-left:10px;
+}
+.top-line{
+    width:100px;
+    height:35px;
+    position: absolute;
+    text-align: center;
+    float:left;
+    top:16px;
+    border-top: 1px solid #EEEEEE;
+    border-left: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+    border-bottom: 1px solid #ffffff;
+    background-color: #E8F0F4;
+}
+.selected{
+    background-color: #ffffff;
+}
+.top-line-text{
+    margin-top:4px;
+    font-size:13px;
+    font-family: 宋体;
+    cursor:pointer;
+}
+.top-line-delete{
+    width:20px;
+    height:6px;
+    margin-right:2px;
+    float:right;
+    text-align:right;
+    cursor:pointer;
+    font-size:11px;
+}
+#right-right{
+    width:100px;
+    height:40px;
+    margin-top:2px;
+    margin-right:3px;
+    float:right;
+    background-color: #ffffff;
+}
+#top-user_photo{
+    width:35px;
+    height:35px;
+    margin-top: 5px;
+    margin-left:45px;
+}
+#loginout{
+    display:none;
+}
+#loginout b{
+    color:#aaaaaa;
+    margin-bottom:-5px;
+    font-size:14px;
+}
+#right-right a{
+    text-decoration: none;
+    color:#333333;
+    font-weight:600;
+}
+.left-line{
+    width:35px;
+    height:35px;
+    padding:15px 20px 20px 10px;
+    /*opacity: 0.9;*/
+    /*filter:alpha(opacity=40);*/
+}
+.tips-line-content{
+    color:#bbe5ff;
+    margin-top: 20px;
+    min-height:235px;
+}
+.lefttips{
+    margin-left:-17px;
+    width:16px;
+    height:16px;
+}
+
+#content{
+    display:none; /*2*/
+    position: fixed;
+    z-index:1000;
+    margin-left:65px;
+    width:155px;
+    background-color: #5CB85C;
+}
+#right{  
+    width:82%;
+    margin-top:52px;
+    margin-left:65px;/*1*/
+    float:left;
+}
+#foots-div{
+    float:left;
+    margin-left:55px;/*2*/
+    margin-top:4px;
+    font-size: 12px;
+}
+
+/*二级导航*/
+#tpiss{
+    position: fixed;
+    left:65px;
+    width:124px;
+    min-height:170px;
+    background-color:#2F2F2F;
+    opacity: 0.88;
+    filter:alpha(opacity=88);
+    z-index:1100;
+    font-size:12px;
+    font-weight: 600;
+    padding:3px 20px 3px 10px;
+}

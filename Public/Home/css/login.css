@@ -1,0 +1,87 @@
+body{
+    margin:0px;
+    padding:0px;
+    background-color: white;
+}
+#topdiv{
+    background-color: #2F2F2F;
+    height:67px;
+}
+#icon_img{
+    padding-top:10px;
+    padding-left: 15px;
+}
+#icon_img img{
+    width:45px;
+    height:45px;
+}
+#content_submit{
+    margin:auto;
+    width:515px;
+    height:358px;
+    margin-top: 7%;
+    border-top:1px solid #EEEEEE;
+    border-left:1px solid #EEEEEE;
+    border-right:2px solid #EEEEEE;
+    border-bottom:2px solid #EEEEEE;
+    border-radius: 5px;
+}
+
+.title{  
+    color:#FE8826; 
+    font-size: 21px;
+    padding-top:15px;
+    font-weight: 800;
+    border-bottom:1px solid #E9E9E9;
+}
+.userid{
+    color:#747474; 
+    padding-top:35px;
+    font-size: 18px;
+}
+.password{
+    color:#747474; 
+    font-size: 18px;
+}
+.submit{
+    background-color: #53B753;
+    margin-top:25px;
+    padding-top:10px;
+    color:#ffffff;
+    width:325px;
+    height:30px;
+}
+#verify{
+    width:100px;
+    height:40px;
+    float:left;
+    background-color: #aaaaaa;
+}
+#varifytext{
+    float: left;
+    margin-left:73px;
+    margin-top:5px;
+}
+.submit p{
+    margin-top:3px;
+}
+.inputverify{
+    width:120px;
+    float:left;
+}
+.verifyimg{
+    float:left;
+    margin-left:10px;
+}
+.verify{
+    color:#747474; 
+    font-size: 18px;
+    display:none;
+}
+#tips-div{
+    margin-top:6px;
+    margin-left:90px;
+    font-size: 14px;
+    color:red;
+    font-weight: 400;
+}
