@@ -3,5 +3,6 @@
 	echo "222222";
 	echo "444444";
 	echo "555555";
+	echo "11";
 	var_dump("zyf");
 ?>
