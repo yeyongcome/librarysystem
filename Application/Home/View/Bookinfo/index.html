@@ -1,0 +1,185 @@
+<extend name="Public/index"/>
+<block name="content">
+       <div id = "data-top">
+       		<div class="title-top">
+       			<b>图书查询</b>
+       		</div>
+       		<div class="title-content">
+	       		<span>书名:</span>
+	       		<input class = "select-type" type="text" id = "search_book_name" value='{$content.book_name}'>
+	       		<span>类别:</span>
+	       		<select id = "search_book_type" class="select-type select-check">
+	       			<option class='select_type' value="0">请选择类别</option>
+		            <volist name="lists" id="vo">
+		                 <option class='select_type'  value='{$vo.id}'>{$vo.name}</option>
+		            </volist>
+	       		</select>
+
+	       		<span>是否蓝标:</span>
+	       		<select id = "search_is_blue" class="select-type select-check">
+	       			<option class='select_blue' value="2">-请选择-</option>
+	       			<option class='select_blue' value="0">-否-</option>
+	       			<option class='select_blue' value="1">-是-</option>
+	       		</select>
+	       		
+	       		<span class = "databutton datasearch" onclick="search_data()">检索</span>
+	       	</div>
+       		<div style="clear:both;">
+       		</div>
+       </div>
+
+       <div id = "data-botton">
+	       	<table class = "data-table">
+	       	     <tr>
+	       	     	<th class = "first-tr">图书编号</th>
+	       	     	<th>书名</th>
+	       	     	<th>图书类别</th>
+	       	     	<th>是否借出</th>
+	       	     	<th>是否蓝标</th>
+	       	     	<th>添加时间</th>
+	       	     	<th>操作</th>
+	       	     </tr>
+	       	     <notempty name = "result">
+		       	     <volist name = "result" id = "vo">
+		       	     	<tr>
+		       	     		<td class="first-tr">{$vo.id}</td>
+			       	     	<td>{$vo.name}</td>
+			       	     	<td>
+			       	     		{$vo.type_name}
+			       	     	</td>
+			       	     	<td>
+			       	     		<if condition = "$vo.is_checkout eq 1">
+			       	     			是<else/>否
+			       	     		</if>
+			       	     	</td>
+			       	     	<td>
+			       	     		<if condition = "$vo.is_blue eq 1">
+			       	     			是<else/>否
+			       	     		</if>
+			       	     	</td>
+			       	     	<td>{$vo.create_time|date='Y-m-d',###}</td>
+		       	     		<td>
+			       	     		<if condition="$Think.session.type eq 4">
+			       	     			<if condition="$vo.is_checkout eq 0">
+				       	     			<a href="javascript:" onclick="edit_book('{$vo.id}',$(this))">修改</a>
+				       	     			<a href="javascript:" onclick="del_book('{$vo.id}')">删除</a>  
+				       	     		<else/>
+				       	     			修改  删除
+				       	     		</if>
+			       	     		<else/>
+			       	     			<if condition="$vo.is_checkout eq 0">
+				       	     			<if condition="$vo.is_blue eq 0">
+				       	     				<a href="javascript:" onclick="borrow_book('{$vo.id}')">点击借阅</a>
+				       	     			<else/>
+				       	     				点击借阅
+				       	     			</if>
+				       	     		<else/>
+				       	     			点击借阅
+				       	     		</if>
+			       	     		</if>
+			       	     	</td>	
+			       	     </tr>
+		       	     </volist>
+		       	</table>
+		       	<else/>			
+	       		</table>
+	       		<div class="no-notice"><h3>ai..暂时无数据!</h3></div>
+	       	</notempty>
+	       	 <div class="witing-div">
+			{$_page}
+			</div>
+			<div class="witing-div">
+				<img class='witing' src='__IMG__/loading_icon.gif'>
+			</div>
+       </div>
+       <input type='hidden' id = 'book_type_status' value='{$content.book_type}'>
+       <input type='hidden' id = 'user_type' value='{$Think.session.type}'>
+       <input type='hidden' id = 'chbook_type' value=''>
+       <input type='hidden' id = 'chbook_name' value=''>
+       <input type='hidden' id = 'chbook_id' value=''>
+       <input type='hidden' id = 'se_is_blue' value='{$content.is_blue}'>
+       <input type='hidden' id = 'se_book_type' value='{$content.book_type}'>
+</block>
+<block name="script">
+<script type="text/javascript" src="__STATIC__/layerv1.8.5/layer/layer.min.js"></script>
+	<script>
+		$(".select_blue").each(function(){
+			if($.trim($(this).val()) == $.trim($('#se_is_blue').val())){
+				$(this).attr('selected',true);
+			}
+		});
+		$(".select_type").each(function(){
+			if($.trim($(this).val()) == $.trim($('#se_book_type').val())){
+				$(this).attr('selected',true);
+			}
+		});
+        function edit_book(id,obj) {
+        	$("#chbook_type").val(obj.parent().parent().children(":eq(0)").html());
+        	$("#chbook_name").val(obj.parent().parent().children(":eq(1)").html());
+        	$("#chbook_id").val(obj.parent().parent().children(":eq(2)").html());
+            $.layer({
+                type: 2,
+                shade: [0],
+                fix: false,
+                title: '图书信息修改',
+                shade: [0.1, '#000'],
+                maxmin: true,
+                iframe: {src : $("#model_url").val()+'/editbook'},
+                area: ['550px' , '450px'],
+                close: function(index){
+                    //layer.msg('您获得了子窗口标记：' + layer.getChildFrame('#name', index).val(),3,1);
+                }
+            });
+        }
+        function del_book(id){
+			$.ajax({
+                url:$("#model_url").val()+'/del_book',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    id:id
+                },
+                success:function(data){
+                	if(data > 0){	
+                		web_notice('删除成功',0);
+                		setTimeout("window.location.reload();",1500);
+                	}else{
+                		web_notice('删除失败',1);
+                	} 
+                }
+            });
+		}
+		function borrow_book(id){
+			if($("#user_type").val() == '1'){
+				window.location.href = '__ROOT__/index.php';
+				return false;
+			}
+			$.ajax({
+                url:$("#model_url").val()+'/borrow_book',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    id:id
+                },
+                success:function(data){
+                	if(data > 0){	
+                		web_notice('借阅成功',0);
+                		setTimeout("window.location.reload();",1500);
+                	}else if(data == -1){
+                		web_notice('借阅失败,您有超期的图书未还',1);
+                	}else{
+                		web_notice('借阅失败',1);
+                	}
+                }
+            });
+		}
+		//查询
+        function search_data(){
+            var p         = $("#PageNum").val();
+            var book_name = $.trim($("#search_book_name").val());
+            var book_type = $.trim($("#search_book_type").val());
+            var is_blue   = $.trim($("#search_is_blue").val());
+            window.location.href = $('#model_url').val()+"/index?p="+p+"&book_name="+book_name+"&book_type="+book_type+"&is_blue="+is_blue;
+         }
+	</script>
+</block>

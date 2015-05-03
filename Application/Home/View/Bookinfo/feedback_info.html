@@ -1,0 +1,143 @@
+<extend name="Public/index"/>
+<block name="content">
+       <div id = "data-top">
+       		<div class="title-top">
+       			<b>反馈信息</b>
+       		</div>
+       		<div class="title-content">
+       			<span>反馈人:</span>
+	       		<input class = "select-type" type="text" id = "search_user_name">
+	       		<span>是否回复:</span>
+	       		<select id = "search_book_type" class="select-type select-check">
+	       			<option value="6">-选择-</option>
+	       		</select>
+	       		<span class = "databutton datasearch" onclick="user_search()">检索</span>
+	       	</div>
+       		<div style="clear:both;">
+       		</div>
+       </div>
+
+       <div id = "data-botton">
+	       	<table class = "data-table">
+	       	     <tr>
+	       	     	<th class = "first-tr">反馈人</th>
+	       	     	<th>反馈内容</th>
+	       	     	<th>反馈时间</th>
+	       	     	<th>操作</th>
+	       	     </tr>
+	       	     <notempty name = "user_list">
+		       	     <volist name = "user_list" id = "vo">
+		       	     	<tr>
+			       	     	<td class="first-tr">{$vo.nick_name}</td>
+			       	     	<td>
+			       	     		<notempty name = "vo.real_name">
+			       	     		{$vo.real_name}<else/>暂无
+			       	     		</notempty>
+			       	     	</td>
+			       	     	<td>
+			       	     		<if condition = "$vo.gender eq 1">
+			       	     			女<else/>男
+			       	     		</if>
+			       	     	</td>
+			       	     	<td>{$vo.phone}</td>
+			       	     	<td>
+			       	     		<if condition="$vo.user_type eq 0">
+			       	     			未确认
+			       	     		<elseif condition="$vo.user_type eq 1"/>
+			       	     			大学生
+			       	     		<elseif condition="$vo.user_type eq 2"/>
+			       	     			高中生
+			       	     	    <elseif condition="$vo.user_type eq 3"/>
+			       	     			初中生
+			       	     	    <elseif condition="$vo.user_type eq 4"/>
+			       	     			小学生
+			       	     	    <elseif condition="$vo.user_type eq 5"/>
+			       	     			其他
+			       	     	    </if>
+			       	     	</td>
+			       	     	<td>
+			       	     		<if condition="$vo.is_active eq 1">
+			       	     			已激活<else/>未激活
+			       	     		</if>
+			       	     	</td>	
+			       	     </tr>
+		       	     </volist>
+		       	</table>
+		       	<else/>			
+	       		</table>
+	       		<div class="no-notice"><h3>ai..暂时无数据!</h3></div>
+	       	</notempty>
+	       	 <div class="witing-div">
+			{$_page}
+			</div>
+			<div class="witing-div">
+				<img class='witing' src='__IMG__/loading_icon.gif'>
+			</div>
+       </div>
+</block>
+<block name="script">
+	<script>
+		function forbid_user(id,status){
+			$.ajax({
+                url:$("#model_url").val()+'/forbid_user',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    id:id,
+                    status:status
+                },
+                success:function(data){
+                	if(data > 0){	
+                		search_data(); //异步刷新
+                		web_notice('操作成功',0);
+                	}else{
+                		web_notice('操作失败',1);
+                	} 
+                }
+            });
+		}
+		function user_search(){
+			$("#PageNum").val(1);
+			search_data();
+		}
+
+		//异步分页
+        function search_data(){
+            var p         = $("#PageNum").val();
+            var real_name = $.trim($("#search_real_name").val());
+            var phone     = $.trim($("#search_phone").val());
+            var email     = $.trim($("#search_email").val());
+            var start_time= $.trim($("#start_time").val());
+            var end_time  = $.trim($("#end_time").val());
+            var gender    = $.trim($("#search_user_sex").val());
+            var status    = $.trim($("#search_user_status").val());
+            var user_type = $.trim($("#search_user_type").val());
+            var is_active = $.trim($("#search_user_isactive").val());
+
+            $('.witing').css('display','block');
+            $.ajax({
+                url:$("#model_url").val()+'/user_data_search',
+                type:"POST",
+                dataType:"TEXT",
+                data:{
+                    p:p,
+                    real_name :real_name,
+                    phone     :phone,
+                    email     :email,
+                    start_time:start_time,
+                    end_time  :end_time,
+                    gender    :gender,
+                    status    :status,
+                    user_type :user_type,
+                    is_active :is_active
+                },
+                success:function(data){
+                    $(".witing").css("display","none");
+                    $("#data-botton").html(data);
+                }
+            });
+         }
+	</script>
+</block>
+
+

@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>欢迎登陆在线答疑后台</title>
+    <link rel="stylesheet" type="text/css" href="__CSS__/common.css" media="all">
+    <link rel="stylesheet" type="text/css" href="__CSS__/login.css" media="all">
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="__JS__/common.js"></script>
+    <script type="text/javascript" src="__STATIC__/jquery.cookie.js"></script>
+</head>
+<body>
+	<div id="topdiv">
+		<div id="icon_img"><img src = "__IMG__/29@2x.png"></div>
+	</div>
+    <div id="content_submit">
+        <div class="form-div title">
+            在线答疑后台登陆
+        </div>
+        <div class="form-div userid">
+            账号：&nbsp;&nbsp;<input class="text-input" name = "user_id" placeholder="请填写账号" type="text">
+        </div>
+        <div class="form-div password">
+            密码：&nbsp;&nbsp;<input class="text-input" name = "password" placeholder="请填写密码" type="password">
+        </div>
+        <div class="form-div verify">
+            <div id="varifytext" >验证码：</div>
+            <input class="text-input inputverify" name = "verify" placeholder="请填写验证码" type="text">
+              <img class = "verifyimg" alt="点击切换" src="{:U('Public/Verify')}">
+        </div>
+        <div class="form-div submit">
+            <p>登陆</p>
+            <p style="display:none;"><img src= '__IMG__/loading_icon.gif'>&nbsp;登录中...</p>
+        </div>
+        <div id="tips-div"></div>
+    </div>
+
+    <input type="hidden" id="root_url" value="__ROOT__"/>
+    <input type="hidden" id="model_url" value="__URL__"/>
+    <input type="hidden" id="img_url" value="__IMG__"/>
+    <input type="hidden" id="state" name="state" value = 'true'>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $("input[name='user_id']").focus();
+            $(".text-input").val('');
+            $(".verifyimg").mouseover(function(){
+                $(this).css("cursor","pointer");
+            });
+            $(".submit").mouseover(function(){
+                $(this).css("cursor","pointer");
+                $(this).css("background-color","#40C402");
+            });
+            $(".submit").mouseout(function(){
+                $(this).css("background-color","#53B753");
+            });
+            //添加浏览器支持
+            var  browser = $.trim(navigator.appName);  
+            if(browser == "Microsoft Internet Explorer"){
+                var b_version = navigator.appVersion; 
+                var version = b_version.split(";");  
+                var trim_Version = version[1].replace(/[ ]/g,"");  
+                trim_Version = $.trim(trim_Version);
+                if(trim_Version=="MSIE 6.0"){  
+                    $("#state").val('false'); 
+                }else if(trim_Version=="MSIE 7.0"){   
+                    $("#state").val('false');  
+                }else if(trim_Version=="MSIE 8.0")  {  
+                    $("#state").val('false');  
+                }else{
+                    $("#state").val('true'); 
+                }
+            }else{
+                $("#state").val('true'); 
+            }
+
+            //如果浏览器支持
+            if($("#state").val() == 'true'){
+                //输入密码出错
+                if($.cookie('notice_state') == 1){
+                    $(".userid").css("padding-top","35px");
+                    $(".verify").css('display','block');
+                    $(".submit").css("margin-top","25px");
+                }else{
+                    $(".userid").css("padding-top","60px");
+                    $("#verify").css('display','none');
+                    $(".submit").css("margin-top","40px");
+                }
+            }
+        });
+
+        var verifyimg = $(".verifyimg").attr("src");
+        $(".verifyimg").click(function(){
+            if( verifyimg.indexOf('?')>0){
+                $(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
+            }else{
+                $(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+            }
+        });
+
+        $(".submit").click(function(){
+            var user_id  = $.trim($("input[name='user_id']").val());
+            var password = $.trim($("input[name='password']").val());
+            var verify   = $.trim($("input[name = 'verify']").val());
+            if(user_id == ''){
+                $("#tips-div").html("账号不能为空");
+                return false;
+            }
+            if(password == ''){
+                $("#tips-div").html("密码不能为空");
+                return false;
+            }
+
+            if($("#state").val() == 'true'){
+                if($.cookie('notice_state') == 1){
+                    if(verify == ""){
+                        $("#tips-div").html("验证码不能为空");
+                        return false;
+                    }
+                }
+            }
+            $(this).find("p:eq(0)").css("display","none");
+            $(this).find("p:eq(1)").css("display","block");
+            $.ajax({
+                url:$("#model_url").val()+"/do_login",
+                type:'post',
+                dataType:'text',
+                data:({
+                    user_id:user_id,
+                    password:password,
+                    verify:verify,
+                    notice_state:$.cookie('notice_state')
+                }),
+                success:function(data){
+                    if(data == 1){
+                        $("#tips-div").html("验证码错误");
+                        $(".verifyimg").click();
+                    }else if(data > 1){
+                        if($("#state").val() == 'true'){
+                            $.cookie('notice_state', 0 ,{ expires: 7 });
+                        }
+                        window.location.href = "__ROOT__/index.php/Index/index.html";
+                    }else{
+                        $("#tips-div").html("用户名或密码错误");
+                        $(".verifyimg").click();
+                        if($("#state").val() == 'true'){
+                            $(".submit").css("margin-top","25px");
+                            $(".verify").css('display','block');
+                            $(".userid").css("padding-top","35px");
+                            $.cookie('notice_state', 1 ,{ expires: 7 });
+                        }
+                    }
+                    $(".submit").find("p:eq(0)").css("display","block");
+                    $(".submit").find("p:eq(1)").css("display","none");
+                }
+            });
+        });
+        
+        //添加快捷键支持
+        document.onkeydown = function(e){
+            var ev = document.all ? window.event : e;
+            if(ev.keyCode == 13) {
+                $(".submit").click();
+            }
+        }
+
+    </script>
+</body>
+</html>
